@@ -1,13 +1,17 @@
 package com.appsdeveloper.estore.productservice.core.events;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class ProductCreateEvent {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductCreatedEvent {
     private String productId;
     private String title;
     private BigDecimal price;

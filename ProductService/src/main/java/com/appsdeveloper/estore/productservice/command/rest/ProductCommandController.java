@@ -23,11 +23,7 @@ public class ProductCommandController {
 
     @PostMapping
     public String createProduct(@Valid @RequestBody CreateProductRestModel createProductRestModel) {
-        CreateProductCommand createProductCommand = CreateProductCommand.builder()
-                .price(createProductRestModel.getPrice())
-                .quantity(createProductRestModel.getQuantity())
-                .title(createProductRestModel.getTitle())
-                .productId(UUID.randomUUID().toString()).build();
+        CreateProductCommand createProductCommand = getCreateProductCommand(createProductRestModel);
         String value;
         try {
             value = commandGateway.sendAndWait(createProductCommand);
@@ -37,18 +33,12 @@ public class ProductCommandController {
         return value;
     }
 
-//    @GetMapping
-//    public String getProducts() {
-//        return "HTTP GET Handler ".concat(environment.getProperty("local.server.port"));
-//    }
-
-//    @PutMapping
-//    public String putProduct() {
-//        return "HTTP PUT Handler ".concat(environment.getProperty("local.server.port"));
-//    }
-//
-//    @DeleteMapping
-//    public String deleteProduct() {
-//        return "HTTP DELETE Handler".concat(environment.getProperty("local.server.port"));
-//    }
+    private CreateProductCommand getCreateProductCommand(CreateProductRestModel createProductRestModel) {
+        CreateProductCommand createProductCommand = CreateProductCommand.builder()
+                .price(createProductRestModel.getPrice())
+                .quantity(createProductRestModel.getQuantity())
+                .title(createProductRestModel.getTitle())
+                .productId(UUID.randomUUID().toString()).build();
+        return createProductCommand;
+    }
 }

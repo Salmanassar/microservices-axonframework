@@ -1,7 +1,7 @@
 package com.appsdeveloper.estore.productservice.command;
 
 import com.appsdeveloper.estore.productservice.command.rest.CreateProductCommand;
-import com.appsdeveloper.estore.productservice.core.events.ProductCreateEvent;
+import com.appsdeveloper.estore.productservice.core.events.ProductCreatedEvent;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -24,23 +24,27 @@ public class ProductAggregate {
 
     @CommandHandler
     public ProductAggregate(CreateProductCommand createProductRestModel) {
+        checkingPriceAndTitle(createProductRestModel);
+        ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent();
+        BeanUtils.copyProperties(createProductRestModel, productCreatedEvent);
+        AggregateLifecycle.apply(productCreatedEvent);
+    }
+
+    @EventSourcingHandler
+    public void on(ProductCreatedEvent productCreatedEvent) {
+        this.productId = productCreatedEvent.getProductId();
+        this.title = productCreatedEvent.getTitle();
+        this.price = productCreatedEvent.getPrice();
+        this.quantity = productCreatedEvent.getQuantity();
+    }
+
+    private void checkingPriceAndTitle(CreateProductCommand createProductRestModel) {
         if (createProductRestModel.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Price can not be less or equal than zero");
         }
         if (createProductRestModel.getTitle() == null
                 || createProductRestModel.getTitle().isBlank()) {
-            throw new IllegalArgumentException("Price can not be less or equal than zero");
+            throw new IllegalArgumentException("Title cannot be empty");
         }
-        ProductCreateEvent productCreateEvent = new ProductCreateEvent();
-        BeanUtils.copyProperties(createProductRestModel, productCreateEvent);
-        AggregateLifecycle.apply(productCreateEvent);
-    }
-
-    @EventSourcingHandler
-    public void on(ProductCreateEvent productCreateEvent) {
-        this.productId = productCreateEvent.getProductId();
-        this.title = productCreateEvent.getTitle();
-        this.price = productCreateEvent.getPrice();
-        this.quantity = productCreateEvent.getQuantity();
     }
 }

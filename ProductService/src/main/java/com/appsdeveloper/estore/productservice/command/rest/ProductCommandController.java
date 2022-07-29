@@ -25,11 +25,12 @@ public class ProductCommandController {
     public String createProduct(@Valid @RequestBody CreateProductRestModel createProductRestModel) {
         CreateProductCommand createProductCommand = getCreateProductCommand(createProductRestModel);
         String value;
-        try {
-            value = commandGateway.sendAndWait(createProductCommand);
-        } catch (Exception ex) {
-            value = ex.getLocalizedMessage();
-        }
+        value = commandGateway.sendAndWait(createProductCommand);
+//        try {
+//            value = commandGateway.sendAndWait(createProductCommand);
+//        } catch (Exception ex) {
+//            value = ex.getLocalizedMessage();
+//        }
         return value;
     }
 

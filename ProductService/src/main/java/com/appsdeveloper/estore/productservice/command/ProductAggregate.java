@@ -23,7 +23,7 @@ public class ProductAggregate {
     private Integer quantity;
 
     @CommandHandler
-    public ProductAggregate(CreateProductCommand createProductRestModel) {
+    public ProductAggregate(CreateProductCommand createProductRestModel){
         checkingPriceAndTitle(createProductRestModel);
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent();
         BeanUtils.copyProperties(createProductRestModel, productCreatedEvent);

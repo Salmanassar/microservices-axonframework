@@ -26,11 +26,6 @@ public class ProductCommandController {
         CreateProductCommand createProductCommand = getCreateProductCommand(createProductRestModel);
         String value;
         value = commandGateway.sendAndWait(createProductCommand);
-//        try {
-//            value = commandGateway.sendAndWait(createProductCommand);
-//        } catch (Exception ex) {
-//            value = ex.getLocalizedMessage();
-//        }
         return value;
     }
 
